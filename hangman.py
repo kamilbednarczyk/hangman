@@ -1,10 +1,5 @@
 import random
-# did it change
-# yes
-# second yes
-
-# modyfikacja
-# druga modyfikacja dasghdkajshdj
+import time
 
 
 def chooseCity():
@@ -63,6 +58,31 @@ def lives_left(lives, result):
         print("Good shot")
     print(f"You have {lives} lives left")
     return lives
+
+
+# add to START and END main()
+def stoper():
+    return time.time()
+
+
+# add to highscore list
+def endTime():
+    clock = time.strftime('%d %b %Y %H:%M:%S')
+    return clock
+
+
+# add to the end of the file
+def playerName():
+    name = input('Podaj swoje imię: ')
+    return name
+
+
+# in main add this function and arg
+def addToHighscore(capital):
+    name = playerName()
+    date = endTime()
+    # guesing_time
+    # punctation
 
 
 def main():
