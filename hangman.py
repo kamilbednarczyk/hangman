@@ -1,11 +1,32 @@
 import random
 import time
+from os import system
+import os.path as path
 
+def readFromFile():
+    try:
+        path_to_script = path.dirname(path.abspath(__file__))
+        new_path = path.join(path_to_script, "countries_and_capitals.txt")
+        with open(new_path, 'r', encoding="utf-8") as f:
+            return f.readlines()
+    except FileNotFoundError:
+        print("Cannot Find a file with countries and capitals")
+        return None
 
 def chooseCity():
-    l = ["Warsaw", "Berlin", "London DS"]
-    word = random.choice(l)
-    return word.upper()
+    l = readFromFile()
+    if l == None:
+        l = ["Warsaw | Poland", "Berlin | Germany", "London | England"]
+    record = random.choice(l)
+
+    country, capital = record.split("|")
+    capital, country = capital.strip().upper(), country.strip()
+    return (capital, country)
+
+
+def tip(lives, country):
+    if lives == 1:
+        print(f"Psst, It's the capital city of {country}.")
 
 
 def blankSpots(capital):
@@ -98,7 +119,7 @@ def main():
         not_in_word = []
         in_word = set()
         lives = 5
-        capital = chooseCity()
+        capital, country = chooseCity()
         print(capital)
         guessed_letters = blankSpots(capital)
         print()
@@ -118,6 +139,7 @@ def main():
                 print("You win")
                 break
             lives = lives_left(lives, result)
+            tip(lives, country)
         stop_time = stoper()
         again = input("Do you want to play again? (Enter yes or no): ")
         if again.lower() == "no":
