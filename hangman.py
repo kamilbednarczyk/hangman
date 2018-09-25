@@ -3,6 +3,7 @@ import time
 from os import system
 import os.path as path
 
+
 def readFromFile():
     try:
         path_to_script = path.dirname(path.abspath(__file__))
@@ -36,12 +37,14 @@ def print_word_status(word):
         print(f"{place}", end=" ")
     print()
 
+
 def play_again():
     again = input("Do you want to play again? (Enter yes or no): ")
     if again.lower() == "no":
         return False
     elif again.lower() == "yes":
         return True
+
 
 def blankSpots(capital):
     b_spots = []
@@ -77,19 +80,19 @@ def checkWord(capital, guessed_letters):
 
 
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
-    user_letter = input(
-        'Enter one letter which is in the name of the capital: ').upper()
-    letter_list = []
-    result = -1
-    for i in range(len(capital)):
-        if capital[i] == user_letter:
-            guessed_letters[i] = user_letter
-            result = 0
-    if result == 0:
-        in_word.add(user_letter)
-    else:
-        not_in_word.append(user_letter)
-    return result
+        user_letter = input(
+            'Enter one letter which is in the name of the capital: ').upper()
+        letter_list = []
+        result = -1
+        for i in range(len(capital)):
+            if capital[i] == user_letter:
+                guessed_letters[i] = user_letter
+                result = 0
+        if result == 0:
+            in_word.add(user_letter)
+        else:
+            not_in_word.append(user_letter)
+        return result
 
 
 def lives_left(lives, result):
