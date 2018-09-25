@@ -1,10 +1,13 @@
 import random
-#did it change
+# did it change
+# yes
+
 
 def chooseCity():
     l = ["Warsaw", "Berlin", "London DS"]
     word = random.choice(l)
     return word.upper()
+
 
 def blankSpots(capital):
     b_spots = []
@@ -15,10 +18,12 @@ def blankSpots(capital):
             b_spots.append('_')
     return b_spots
 
+
 def getUserInput():
-    decision = input("Enter 'w' if you want to enter a whole word." + 
-                    "Enter 'l' if you want to enter one letter: ")
+    decision = input("Enter 'w' if you want to enter a whole word." +
+                     "Enter 'l' if you want to enter one letter: ")
     return decision.upper()
+
 
 def checkWord(capital, guessed_letters):
     user_capital = input('Enter name of the capital: ')
@@ -29,8 +34,10 @@ def checkWord(capital, guessed_letters):
     else:
         return -2
 
+
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
-    user_letter = input('Enter one letter which is in the name of the capital: ').upper()
+    user_letter = input(
+        'Enter one letter which is in the name of the capital: ').upper()
     letter_list = []
     result = -1
     for i in range(len(capital)):
@@ -43,6 +50,7 @@ def checkLetter(capital, guessed_letters, in_word, not_in_word):
         not_in_word.append(user_letter)
     return result
 
+
 def lives_left(lives, result):
     if result != 0:
         print("Wrong answer! You lose one life")
@@ -51,6 +59,7 @@ def lives_left(lives, result):
         print("Good shot")
     print(f"You have {lives} lives left")
     return lives
+
 
 def main():
     play = True
@@ -69,7 +78,8 @@ def main():
             if getUserInput() == "W":
                 result = checkWord(capital, guessed_letters)
             else:
-                result = checkLetter(capital, guessed_letters, in_word, not_in_word)
+                result = checkLetter(
+                    capital, guessed_letters, in_word, not_in_word)
             print(guessed_letters)
             # print(result)
             print(in_word, not_in_word)
@@ -84,6 +94,7 @@ def main():
             play = True
 
     print("end")
+
 
 if __name__ == "__main__":
     main()
