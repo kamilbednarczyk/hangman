@@ -78,15 +78,22 @@ def playerName():
 
 
 # in main add this function and arg
-def addToHighscore(capital):
+# trzeba wywolac addToHighScore w main() z argumentami start_time(start) stop_time(stop)
+def addToHighscore(capital, start, stop):
     name = playerName()
     date = endTime()
-    # guesing_time
-    # punctation
+    play_time = scoring(start, stop)
+    # scoring function
+    capital = capital
+
+
+def scoring(start, stop):
+    time_score = 1200 - (10*(stop-start))
 
 
 def main():
     play = True
+    start_time = stoper()
     while play:
         not_in_word = []
         in_word = set()
@@ -107,10 +114,11 @@ def main():
             print(guessed_letters)
             # print(result)
             print(in_word, not_in_word)
-            if not '_' in guessed_letters:
+            if '_' not in guessed_letters:
                 print("You win")
                 break
             lives = lives_left(lives, result)
+        stop_time = stoper()
         again = input("Do you want to play again? (Enter yes or no): ")
         if again.lower() == "no":
             play = False
