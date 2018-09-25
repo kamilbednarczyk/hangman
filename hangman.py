@@ -4,6 +4,7 @@ import random
 # second yes
 
 # modyfikacja
+# druga modyfikacja dasghdkajshdj
 
 
 def chooseCity():
