@@ -3,6 +3,7 @@ import time
 from os import system
 import os.path as path
 
+
 def readFromFile():
     try:
         path_to_script = path.dirname(path.abspath(__file__))
@@ -12,6 +13,7 @@ def readFromFile():
     except FileNotFoundError:
         print("Cannot Find a file with countries and capitals")
         return None
+
 
 def chooseCity():
     l = readFromFile()
@@ -48,11 +50,11 @@ def getUserInput():
 def checkWord(capital, guessed_letters):
     user_capital = input('Enter name of the capital: ')
     if user_capital.upper() == capital:
-        print("Im here!!!!!")
+        underscore_count = guessed_letters.count('_')
         guessed_letters[:] = list(capital)
-        return 0
+        return 0, underscore_count
     else:
-        return -2
+        return -2, None
 
 
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
@@ -92,24 +94,32 @@ def endTime():
     return clock
 
 
-# add to the end of the file
-def playerName():
-    name = input('Podaj swoje imię: ')
-    return name
-
-
 # in main add this function and arg
 # trzeba wywolac addToHighScore w main() z argumentami start_time(start) stop_time(stop)
-def addToHighscore(capital, start, stop):
-    name = playerName()
-    date = endTime()
-    play_time = scoring(start, stop)
-    # scoring function
-    capital = capital
+def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letters):
+    end_game_time = endTime()
+    line_with_data = [player_name, end_game_time,
+                      scoring(start, stop, uncovered_letters), capital]
+    split_line = '|'.join([str(elem) for elem in line_with_data])
+    make_and_edit_high_score_document(split_line)
+
+    # add to main
 
 
-def scoring(start, stop):
+def scoring(start, stop, uncovered_letters):
     time_score = 1200 - (10*(stop-start))
+    under_cover_position = 100 * uncovered_letters
+    score = int(time_score) + under_cover_position
+    return score
+
+
+def make_and_edit_high_score_document(split_line):  # take user score
+    with open('high_score.txt', 'a+') as open_file:
+        open_file.write(split_line)
+
+
+def check_position():
+    pass
 
 
 def main():
@@ -128,7 +138,7 @@ def main():
                 print("You lose!")
                 break
             if getUserInput() == "W":
-                result = checkWord(capital, guessed_letters)
+                result, uncovered_letters = checkWord(capital, guessed_letters)
             else:
                 result = checkLetter(
                     capital, guessed_letters, in_word, not_in_word)
@@ -141,11 +151,9 @@ def main():
             lives = lives_left(lives, result)
             tip(lives, country)
         stop_time = stoper()
-        again = input("Do you want to play again? (Enter yes or no): ")
-        if again.lower() == "no":
-            play = False
-        elif again.lower() == "yes":
-            play = True
+        player_name = input('What is your name?')
+        list_to_add_in_highscore(
+            capital, start_time, stop_time, player_name, uncovered_letters)
 
     print("end")
 
