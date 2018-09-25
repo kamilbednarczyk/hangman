@@ -3,6 +3,8 @@ import random
 # yes
 # second yes
 
+# modyfikacja
+
 
 def chooseCity():
     l = ["Warsaw", "Berlin", "London DS"]
