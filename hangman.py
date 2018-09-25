@@ -1,4 +1,5 @@
 import random
+import time
 from os import system
 import os.path as path
 
@@ -11,7 +12,6 @@ def readFromFile():
     except FileNotFoundError:
         print("Cannot Find a file with countries and capitals")
         return None
-
 
 def chooseCity():
     l = readFromFile()
@@ -81,8 +81,40 @@ def lives_left(lives, result):
     return lives
 
 
+# add to START and END main()
+def stoper():
+    return time.time()
+
+
+# add to highscore list
+def endTime():
+    clock = time.strftime('%d %b %Y %H:%M:%S')
+    return clock
+
+
+# add to the end of the file
+def playerName():
+    name = input('Podaj swoje imię: ')
+    return name
+
+
+# in main add this function and arg
+# trzeba wywolac addToHighScore w main() z argumentami start_time(start) stop_time(stop)
+def addToHighscore(capital, start, stop):
+    name = playerName()
+    date = endTime()
+    play_time = scoring(start, stop)
+    # scoring function
+    capital = capital
+
+
+def scoring(start, stop):
+    time_score = 1200 - (10*(stop-start))
+
+
 def main():
     play = True
+    start_time = stoper()
     while play:
         not_in_word = []
         in_word = set()
@@ -103,11 +135,12 @@ def main():
             print(guessed_letters)
             # print(result)
             print(in_word, not_in_word)
-            if not '_' in guessed_letters:
+            if '_' not in guessed_letters:
                 print("You win")
                 break
             lives = lives_left(lives, result)
             tip(lives, country)
+        stop_time = stoper()
         again = input("Do you want to play again? (Enter yes or no): ")
         if again.lower() == "no":
             play = False
