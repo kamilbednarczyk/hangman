@@ -133,6 +133,8 @@ def lives_left(lives, result):
     if result != 0:
         print("Wrong answer! You lose one life")
         lives += result
+        if lives < 0:
+            lives = 0
     else:
         print("Good shot")
     return lives
@@ -198,17 +200,23 @@ def show_high_score_top10():
 
 
 def menu():
-    system('clear')
-    print('Choose option:\n'+'1. Start Game\n' +
-          '2. High Score\n'+'3. Credits')
-    choice = input('Your choice: ')
-    if choice == '1':
-        pass
-    elif choice == '2':
-        system('clear')
-        show_high_score_top10()
-    elif choice == '3':
-        pass
+    while True:
+        try:
+            system('clear')
+            print('Choose option:\n'+'1. Start Game\n' +
+                '2. High Score\n'+'3. Credits')
+            choice = input('Your choice: ')
+            if choice == '1':
+                break
+            elif choice == '2':
+                system('clear')
+                show_high_score_top10()
+            elif choice == '3':
+                pass
+            else:
+                raise ValueError
+        except ValueError:
+            pass
 
 
 def back_to_menu():
@@ -219,24 +227,22 @@ def back_to_menu():
                 f"Enter '{word_to_exit}' if you want back to menu: ")
             decision = decision.upper()
             if decision == 'EXIT' or decision == 'X':
-                return menu()
+                break
             raise ValueError
         except ValueError:
             print(f"**** You can enter '{word_to_exit}' only. ****")
 
 
 def main():
-    while menu() is True:
-        menu()
-    show_high_score_top10()
     play = True
     while play:
-        start_time = stoper()
+        menu()
         not_in_word = []
         in_word = set()
         lives = 5
         capital, country = chooseCity()
         guessed_letters = blankSpots(capital)
+        start_time = stoper()
         while True:
             system("clear")
             print_hangman(lives)
