@@ -60,7 +60,7 @@ def getUserInput():
     while True:
         try:
             decision = input("Enter 'w' if you want to enter a whole word." +
-                            "Enter 'l' if you want to enter one letter: ")
+                             "Enter 'l' if you want to enter one letter: ")
             decision = decision.upper()
             if decision == 'W' or decision == 'L':
                 return decision
@@ -80,19 +80,19 @@ def checkWord(capital, guessed_letters):
 
 
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
-        user_letter = input(
-            'Enter one letter which is in the name of the capital: ').upper()
-        letter_list = []
-        result = -1
-        for i in range(len(capital)):
-            if capital[i] == user_letter:
-                guessed_letters[i] = user_letter
-                result = 0
-        if result == 0:
-            in_word.add(user_letter)
-        else:
-            not_in_word.append(user_letter)
-        return result
+    user_letter = input(
+        'Enter one letter which is in the name of the capital: ').upper()
+    letter_list = []
+    result = -1
+    for i in range(len(capital)):
+        if capital[i] == user_letter:
+            guessed_letters[i] = user_letter
+            result = 0
+    if result == 0:
+        in_word.add(user_letter)
+    else:
+        not_in_word.append(user_letter)
+    return result
 
 
 def lives_left(lives, result):
@@ -116,16 +116,13 @@ def endTime():
     return clock
 
 
-# in main add this function and arg
-# trzeba wywolac addToHighScore w main() z argumentami start_time(start) stop_time(stop)
 def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letters):
     end_game_time = endTime()
     line_with_data = [player_name, end_game_time,
                       scoring(start, stop, uncovered_letters), capital]
     split_line = '|'.join([str(elem) for elem in line_with_data])
+    print(split_line)
     make_and_edit_high_score_document(split_line)
-
-    # add to main
 
 
 def scoring(start, stop, uncovered_letters):
@@ -135,16 +132,70 @@ def scoring(start, stop, uncovered_letters):
     return score
 
 
-def make_and_edit_high_score_document(split_line):  # take user score
+def make_and_edit_high_score_document(split_line):
     with open('high_score.txt', 'a+') as open_file:
-        open_file.write(split_line)
+        open_file.write(split_line + '\n')
 
 
-def check_position():
-    pass
+def show_high_score_top10():
+    lines = []
+    with open('high_score.txt', "r") as r:
+        lines = r.readlines()
+
+    delet_sign = [item.split('|')for item in lines]
+
+    for l in delet_sign:
+        l[2] = int(l[2])
+    sorted_by_punctation = sorted(
+        delet_sign, key=lambda tup: tup[2], reverse=True)
+
+    for l in sorted_by_punctation:
+        # change item in list to string, because .join() doesn't work with int
+        l[2] = str(l[2])
+        l[1] = l[1]
+    print('Place | Name | Time | Score | Capital\n\n')
+    for place, name in enumerate(sorted_by_punctation):
+
+        if place < 10:
+            dupa = ' | '.join(name)
+            print(f'{place+1}. {dupa}')
+        else:
+            break
+    back_to_menu()
+
+
+def menu():
+    system('clear')
+    print('Choose option:\n'+'1. Start Game\n' +
+          '2. High Score\n'+'3. Credits')
+    choice = input('Your choice: ')
+    if choice == '1':
+        pass
+    elif choice == '2':
+        system('clear')
+        show_high_score_top10()
+    elif choice == '3':
+        pass
+
+
+def back_to_menu():
+    word_to_exit = 'EXIT'
+    while True:
+        try:
+            decision = input(
+                f"Enter '{word_to_exit}' if you want back to menu: ")
+            decision = decision.upper()
+            if decision == 'EXIT' or decision == 'X':
+                return menu()
+            raise ValueError
+        except ValueError:
+            print(f"**** You can enter '{word_to_exit}' only. ****")
 
 
 def main():
+    while menu() is True:
+        menu()
+    show_high_score_top10()
     play = True
     start_time = stoper()
     while play:
@@ -173,7 +224,7 @@ def main():
             lives = lives_left(lives, result)
             tip(lives, country)
         stop_time = stoper()
-        player_name = input('What is your name?')
+        player_name = input('What is your name? ')
         list_to_add_in_highscore(
             capital, start_time, stop_time, player_name, uncovered_letters)
         play = play_again()
