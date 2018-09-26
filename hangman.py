@@ -70,12 +70,16 @@ def print_hangman(lives):
 
 
 def play_again():
-    again = input("Do you want to play again? (Enter yes or no): ")
-    if again.lower() == "no":
-        return False
-    elif again.lower() == "yes":
-        return True
-
+    while True:
+        try:
+            again = input("Do you want to play again? (Enter yes or no): ")
+            if again.lower() == "no":
+                return False
+            elif again.lower() == "yes":
+                return True
+            raise ValueError
+        except ValueError:
+            print("**** You can enter 'yes' or 'no' only. ****")
 
 def blankSpots(capital):
     b_spots = []
