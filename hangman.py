@@ -189,10 +189,12 @@ def show_high_score_top10():
         delet_sign, key=lambda tup: tup[2], reverse=True)
 
     sorted_and_numerate_list = []
-
+    num = 0
     for lp, data in enumerate(sorted_by_punctation):
-        data.insert(0, lp+1)
-        sorted_and_numerate_list.append(data)
+        if num < 10:
+            data.insert(0, lp+1)
+            sorted_and_numerate_list.append(data)
+            num += 1
 
     print(tabulate(sorted_and_numerate_list, headers=[
           'Place', 'Name', 'Time', 'Score', 'Capital'], tablefmt='fancy_grid'))
@@ -200,7 +202,18 @@ def show_high_score_top10():
 
     back_to_menu()
 
+    
+def about():
+    print('Zasady punktacji:')
+    print('Na początku każdy gracz otrzymuje 1200 punktów. Każda sekunda czasu spędzonego'
+          ' nad rozwiązaniem zagadki odejmuje z tej puli 10 punktow.')
+    print('Dodatkowo po odgadnięciu nazwy stolicy, za każdą nie odkrytą literę otrzymujesz dodatkowe 100 punktów.\n')
+    print('Życia:')
+    print('Rozpoczynasz grę z 5 życiami. \nZa źle zgadniętą literę tracisz życie. \nJeśli źle odgadniesz nazwę miasta tracisz 2 życia.\n\n ')
+    print('AUTORZY:\nKamil Bednarczyk\nMarcin Pleban\n')
+    back_to_menu()
 
+    
 def show_banner():
     banner = read_file("banner_hangman.txt")
     print("\033[6;31m"+''.join(banner)+"\033[0m")
@@ -211,8 +224,8 @@ def menu():
         try:
             system('clear')
             show_banner()
-            print('Choose option:\n'+'1. Start Game\n' +
-                  '2. High Score\n'+'3. Credits')
+            print(f'Choose option:\n'+'1. Start Game\n' +
+                  '2. High Score\n'+'3. About\n'+'4. Exit(do zrobienia)\n')
             choice = input('Your choice: ')
             if choice == '1':
                 break
@@ -220,7 +233,8 @@ def menu():
                 system('clear')
                 show_high_score_top10()
             elif choice == '3':
-                pass
+                system('clear')
+                about()
             else:
                 raise ValueError
         except ValueError:
@@ -244,7 +258,8 @@ def back_to_menu():
 def final_informations(in_word, not_in_word, start_time, stop_time):
     tries = len(in_word) + len(not_in_word)
     play_time = int(stop_time - start_time)
-    print(f"You guessed the capital after {tries} letters. It took you {play_time} seconds")
+    print(
+        f"You guessed the capital after {tries} letters. It took you {play_time} seconds")
 
 
 def main():
