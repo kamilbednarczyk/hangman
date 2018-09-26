@@ -3,24 +3,27 @@ import time
 from os import system
 import os.path as path
 
-
-def readFromFile():
+def read_file(f_name):
     try:
         path_to_script = path.dirname(path.abspath(__file__))
-        new_path = path.join(path_to_script, "countries_and_capitals.txt")
+        new_path = path.join(path_to_script, f_name)
         with open(new_path, 'r', encoding="utf-8") as f:
             return f.readlines()
     except FileNotFoundError:
-        print("Cannot Find a file with countries and capitals")
+        print(f"Cannot Find a file - {f.name}")
         return None
 
 
-def chooseCity():
-    l = readFromFile()
-    if l == None:
-        l = ["Warsaw | Poland", "Berlin | Germany", "London | England"]
-    record = random.choice(l)
+def get_cities_from_file():
+    cities = read_file("countries_and_capitals.txt")
+    if cities == None:
+        cities = ["Warsaw | Poland", "Berlin | Germany", "London | England"]
+    return cities
 
+
+def chooseCity():
+    cities = get_cities_from_file()
+    record = random.choice(cities)
     country, capital = record.split("|")
     capital, country = capital.strip().upper(), country.strip()
     return (capital, country)
@@ -38,13 +41,45 @@ def print_word_status(word):
     print()
 
 
-def play_again():
-    again = input("Do you want to play again? (Enter yes or no): ")
-    if again.lower() == "no":
-        return False
-    elif again.lower() == "yes":
-        return True
+def print_wrong_letters(not_in_word):
+    print("Wrong letter used: ", end="")
+    for letter in not_in_word:
+        print(letter, ",", sep="", end=" ")
+    print()
 
+
+def read_hangman_art():
+    hangman_list = read_file("ascii_hangman.txt")
+    if hangman_list == None:
+        hangman_list = ""
+    hangman_list = [elem[:-1] for elem in hangman_list]
+    return hangman_list
+
+
+def print_hangman(lives):
+    art = read_hangman_art()
+    if art:
+        print(art[0])
+        for i in range(1, len(art)):
+            print(art[i][:11], end="")
+            if lives < 5:
+                print(art[i][11:])
+                lives += 1
+            else:
+                print()
+
+
+def play_again():
+    while True:
+        try:
+            again = input("Do you want to play again? (Enter yes or no): ")
+            if again.lower() == "no":
+                return False
+            elif again.lower() == "yes":
+                return True
+            raise ValueError
+        except ValueError:
+            print("**** You can enter 'yes' or 'no' only. ****")
 
 def blankSpots(capital):
     b_spots = []
@@ -82,7 +117,6 @@ def checkWord(capital, guessed_letters):
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
         user_letter = input(
             'Enter one letter which is in the name of the capital: ').upper()
-        letter_list = []
         result = -1
         for i in range(len(capital)):
             if capital[i] == user_letter:
@@ -101,7 +135,6 @@ def lives_left(lives, result):
         lives += result
     else:
         print("Good shot")
-    print(f"You have {lives} lives left")
     return lives
 
 
@@ -146,36 +179,37 @@ def check_position():
 
 def main():
     play = True
-    start_time = stoper()
     while play:
+        start_time = stoper()
         not_in_word = []
         in_word = set()
         lives = 5
         capital, country = chooseCity()
-        print(capital)
         guessed_letters = blankSpots(capital)
-        print()
         while True:
+            system("clear")
+            print_hangman(lives)
+            print(f"You have {lives} lives left")
+            tip(lives, country)
             if lives == 0:
                 print("You lose!")
+                break
+            print_word_status(guessed_letters)
+            print_wrong_letters(not_in_word)
+            if '_' not in guessed_letters:
+                print("You win")
                 break
             if getUserInput() == "W":
                 result, uncovered_letters = checkWord(capital, guessed_letters)
             else:
                 result = checkLetter(
                     capital, guessed_letters, in_word, not_in_word)
-            print_word_status(guessed_letters)
-            # print(result)
-            print(in_word, not_in_word)
-            if '_' not in guessed_letters:
-                print("You win")
-                break
             lives = lives_left(lives, result)
-            tip(lives, country)
         stop_time = stoper()
-        player_name = input('What is your name?')
-        list_to_add_in_highscore(
-            capital, start_time, stop_time, player_name, uncovered_letters)
+        if lives > 0:
+            player_name = input('What is your name?')
+            list_to_add_in_highscore(
+                capital, start_time, stop_time, player_name, uncovered_letters)
         play = play_again()
 
     print("end")
