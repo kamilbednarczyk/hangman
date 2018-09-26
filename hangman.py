@@ -233,6 +233,12 @@ def back_to_menu():
             print(f"**** You can enter '{word_to_exit}' only. ****")
 
 
+def final_informations(in_word, not_in_word, start_time, stop_time):
+    tries = len(in_word) + len(not_in_word)
+    play_time = int(stop_time - start_time)
+    print(f"You guessed the capital after {tries} letters. It took you {play_time} seconds")
+
+
 def main():
     play = True
     while play:
@@ -264,6 +270,7 @@ def main():
             lives = lives_left(lives, result)
         stop_time = stoper()
         if lives > 0:
+            final_informations(in_word, not_in_word, start_time, stop_time)
             player_name = input('What is your name?')
             list_to_add_in_highscore(
                 capital, start_time, stop_time, player_name, uncovered_letters)
