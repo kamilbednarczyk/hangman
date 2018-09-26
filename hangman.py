@@ -201,10 +201,16 @@ def show_high_score_top10():
     back_to_menu()
 
 
+def show_banner():
+    banner = read_file("banner_hangman.txt")
+    print("\033[6;31m"+''.join(banner)+"\033[0m")
+
+
 def menu():
     while True:
         try:
             system('clear')
+            show_banner()
             print('Choose option:\n'+'1. Start Game\n' +
                   '2. High Score\n'+'3. Credits')
             choice = input('Your choice: ')
@@ -262,7 +268,7 @@ def main():
             print_word_status(guessed_letters)
             print_wrong_letters(not_in_word)
             if '_' not in guessed_letters:
-                print("You win")
+                print("You win!")
                 break
             if getUserInput() == "W":
                 result, uncovered_letters = checkWord(capital, guessed_letters)
@@ -273,7 +279,7 @@ def main():
         stop_time = stoper()
         if lives > 0:
             final_informations(in_word, not_in_word, start_time, stop_time)
-            player_name = input('What is your name?')
+            player_name = input('What is your name? ')
             list_to_add_in_highscore(
                 capital, start_time, stop_time, player_name, uncovered_letters)
         play = play_again()
