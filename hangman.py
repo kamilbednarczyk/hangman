@@ -202,7 +202,7 @@ def show_high_score_top10():
 
     back_to_menu()
 
-
+    
 def about():
     print('Zasady punktacji:')
     print('Na początku każdy gracz otrzymuje 1200 punktów. Każda sekunda czasu spędzonego'
@@ -212,6 +212,11 @@ def about():
     print('Rozpoczynasz grę z 5 życiami. \nZa źle zgadniętą literę tracisz życie. \nJeśli źle odgadniesz nazwę miasta tracisz 2 życia.\n\n ')
     print('AUTORZY:\nKamil Bednarczyk\nMarcin Pleban\n')
     back_to_menu()
+
+    
+def show_banner():
+    banner = read_file("banner_hangman.txt")
+    print("\033[6;31m"+''.join(banner)+"\033[0m")
 
 
 def menu():
@@ -278,7 +283,7 @@ def main():
             print_word_status(guessed_letters)
             print_wrong_letters(not_in_word)
             if '_' not in guessed_letters:
-                print("You win")
+                print("You win!")
                 break
             if getUserInput() == "W":
                 result, uncovered_letters = checkWord(capital, guessed_letters)
@@ -289,7 +294,7 @@ def main():
         stop_time = stoper()
         if lives > 0:
             final_informations(in_word, not_in_word, start_time, stop_time)
-            player_name = input('What is your name?')
+            player_name = input('What is your name? ')
             list_to_add_in_highscore(
                 capital, start_time, stop_time, player_name, uncovered_letters)
         play = play_again()
