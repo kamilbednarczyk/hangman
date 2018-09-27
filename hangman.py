@@ -164,7 +164,11 @@ def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letter
 
 
 def scoring(start, stop, uncovered_letters):
-    time_score = 1200 - (10*(stop-start))
+    play_time = stop - start
+    if play_time < 1200:
+        time_score = 1200 - (10*(play_time))
+    else:
+        time_score = 0
     under_cover_position = 100 * uncovered_letters
     score = int(time_score) + under_cover_position
     return score
