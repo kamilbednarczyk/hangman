@@ -314,6 +314,7 @@ def main():
     while play:
         menu()
         not_in_word = []
+        uncovered_letters = 0
         in_word = set()
         lives = 5
         capital, country = chooseCity()
@@ -325,10 +326,17 @@ def main():
             print_lives(lives)
             tip(lives, country)
             if check_lose(lives, capital, country):
+                input("\nEnter enything to proceed to high score. ")
                 break
             print_word_status(guessed_letters)
             print_wrong_letters(not_in_word)
             if check_win(guessed_letters):
+                stop_time = stoper()
+                final_informations(in_word, not_in_word, start_time, stop_time)
+                player_name = input('What is your name? ')
+                list_to_add_in_highscore(
+                capital, start_time, stop_time, player_name, uncovered_letters)
+                input("\nEnter enything to proceed to high score. ")
                 break
             if getUserInput() == "W":
                 result, uncovered_letters = checkWord(capital, guessed_letters)
@@ -336,13 +344,9 @@ def main():
                 result = checkLetter(
                     capital, guessed_letters, in_word, not_in_word)
             lives = lives_left(lives, result)
-        stop_time = stoper()
-        if lives > 0:
-            final_informations(in_word, not_in_word, start_time, stop_time)
-            player_name = input('What is your name? ')
-            list_to_add_in_highscore(
-                capital, start_time, stop_time, player_name, uncovered_letters)
-        play = play_again()
+        system("clear")
+        show_high_score_top10()
+        
 
     print("end")
 
