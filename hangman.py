@@ -45,7 +45,8 @@ def choose_city():
 
 def tip(lives, country):
     if lives == 1:
-        print(f"\n{Colors.purple}Psst, It's the capital city of {country}.{Colors.reset}")
+        print(
+            f"\n{Colors.purple}Psst, It's the capital city of {country}.{Colors.reset}")
 
 
 def print_word_status(word):
