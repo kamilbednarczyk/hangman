@@ -4,6 +4,16 @@ from os import system
 import os.path as path
 from tabulate import tabulate
 
+#repair score counting
+class Colors():
+    reset = "\033[0m"
+    green = "\033[38;2;0;255;0m"
+    br_red = "\033[1;31m"
+    blink_br_red = "\033[1;5;31m"
+    sbrown = "\033[38;2;139;69;19m"
+    nwhite = "\033[38;2;255;222;173m"
+    col = "\033[38;2;139;69;19m"
+
 
 def read_file(f_name):
     try:
@@ -44,10 +54,10 @@ def print_word_status(word):
 
 
 def print_wrong_letters(not_in_word):
-    print("Wrong letter used: ", end="")
+    print(f"{Colors.col}Wrong letter used: ", end="")
     for letter in not_in_word:
         print(letter, ",", sep="", end=" ")
-    print()
+    print(Colors.reset)
 
 
 def read_hangman_art():
@@ -61,14 +71,37 @@ def read_hangman_art():
 def print_hangman(lives):
     art = read_hangman_art()
     if art:
-        print(art[0])
+        print(f"{Colors.sbrown}{art[0]}")
         for i in range(1, len(art)):
             print(art[i][:11], end="")
             if lives < 5:
-                print(art[i][11:])
+                print(f"{Colors.nwhite}{art[i][11:]}{Colors.sbrown}")
                 lives += 1
             else:
                 print()
+        print(f"{Colors.reset}")
+
+
+def print_lives(lives):
+    if lives != 1:
+        print(f"Lives left: {Colors.br_red}{lives}{Colors.reset}")
+    else:
+        print(f"Lives left: {Colors.blink_br_red}{lives}{Colors.reset}")
+
+
+def check_win(guessed_letters):
+    if '_' not in guessed_letters:
+        print("CONGRATULATIONS! YOU WIN!")
+        return True
+    return False
+
+
+def check_lose(lives, capital, country):
+    if lives == 0:
+        print(f"\n{Colors.br_red}YOU LOSE! WE ARE ALL DOOMED!{Colors.reset}\n")
+        print(f"The right answer was {Colors.green}{capital}{Colors.reset}. The capital of {country}.")
+        return True
+    return False
 
 
 def play_again():
@@ -118,28 +151,40 @@ def checkWord(capital, guessed_letters):
 
 
 def checkLetter(capital, guessed_letters, in_word, not_in_word):
-    user_letter = input(
-        'Enter one letter which is in the name of the capital: ').upper()
-    result = -1
-    for i in range(len(capital)):
-        if capital[i] == user_letter:
-            guessed_letters[i] = user_letter
-            result = 0
-    if result == 0:
-        in_word.add(user_letter)
-    else:
-        not_in_word.append(user_letter)
-    return result
+    while True:
+        try:
+            user_letter = input(
+                'Enter one letter which is in the name of the capital: ').upper()
+            if len(user_letter) > 1 or user_letter.isalpha() == False:
+                raise ValueError
+            result = -1
+            for i in range(len(capital)):
+                if capital[i] == user_letter:
+                    guessed_letters[i] = user_letter
+                    result = 0
+            if result == 0:
+                in_word.add(user_letter)
+            else:
+                not_in_word.append(user_letter)
+            return result
+        except ValueError:
+            print("**** You can enter only letter. ****")
+    
 
 
 def lives_left(lives, result):
     if result != 0:
-        print("Wrong answer! You lose one life")
+        if abs(result) == 1:
+            print(f"{Colors.br_red}Wrong answer! You lose one life.{Colors.reset}")
+        elif abs(result) == 2:
+            print(f"{Colors.br_red}Wrong answer! You lose two lives.{Colors.reset}")
+        time.sleep(2)
         lives += result
         if lives < 0:
             lives = 0
     else:
-        print("Good shot")
+        print(f"{Colors.green}Good shot!{Colors.reset}")
+        time.sleep(2)
     return lives
 
 
@@ -216,6 +261,8 @@ def about():
     
 def show_banner():
     banner = read_file("banner_hangman.txt")
+    if banner == None:
+        banner = ""
     print("\033[6;31m"+''.join(banner)+"\033[0m")
 
 
@@ -275,15 +322,13 @@ def main():
         while True:
             system("clear")
             print_hangman(lives)
-            print(f"You have {lives} lives left")
+            print_lives(lives)
             tip(lives, country)
-            if lives == 0:
-                print("You lose!")
+            if check_lose(lives, capital, country):
                 break
             print_word_status(guessed_letters)
             print_wrong_letters(not_in_word)
-            if '_' not in guessed_letters:
-                print("You win!")
+            if check_win(guessed_letters):
                 break
             if getUserInput() == "W":
                 result, uncovered_letters = checkWord(capital, guessed_letters)
