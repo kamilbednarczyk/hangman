@@ -180,34 +180,33 @@ def lives_left(lives, result):
     return lives
 
 
-# add to START and END main()
 def stoper():
     return time.time()
 
 
-# add to highscore list
 def end_time():
     clock = time.strftime('%d %b %Y %H:%M:%S')
     return clock
 
 
-def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letters):
+def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letters, lives):
     end_game_time = end_time()
     line_with_data = [player_name, end_game_time,
-                      scoring(start, stop, uncovered_letters), capital]
+                      scoring(start, stop, uncovered_letters, lives), capital]
     split_line = '|'.join([str(elem) for elem in line_with_data])
     print(split_line)
     make_and_edit_high_score_document(split_line)
 
 
-def scoring(start, stop, uncovered_letters):
+def scoring(start, stop, uncovered_letters, lives):
     play_time = stop - start
     if play_time < 120:
         time_score = 1200 - (10*(play_time))
     else:
         time_score = 0
     under_cover_position = 100 * uncovered_letters
-    score = int(time_score) + under_cover_position
+    live_score = lives * 200
+    score = int(time_score) + under_cover_position + live_score
     return score
 
 
@@ -337,7 +336,7 @@ def main():
                 final_informations(in_word, not_in_word, start_time, stop_time)
                 player_name = input('What is your name? ')
                 list_to_add_in_highscore(
-                capital, start_time, stop_time, player_name, uncovered_letters)
+                    capital, start_time, stop_time, player_name, uncovered_letters, lives)
                 input("\nEnter enything to proceed to high score. ")
                 break
             if get_user_input() == "W":
@@ -349,7 +348,6 @@ def main():
             lives = lives_left(lives, result)
         system("clear")
         show_high_score_top10()
-        
 
 
 if __name__ == "__main__":
