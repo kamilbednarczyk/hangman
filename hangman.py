@@ -270,7 +270,7 @@ def menu():
     while True:
         try:
             system('clear')
-            # show_banner()
+            show_banner()
             print(f'Choose option:\n'+'1. Start Game\n' +
                   '2. High Score\n'+'3. About\n'+'4. Exit(do zrobienia)\n')
             choice = input('Your choice: ')
