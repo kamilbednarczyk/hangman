@@ -4,7 +4,7 @@ from os import system
 import os.path as path
 from tabulate import tabulate
 
-#repair score counting
+
 class Colors():
     reset = "\033[0m"
     green = "\033[38;2;0;255;0m"
@@ -33,7 +33,7 @@ def get_cities_from_file():
     return cities
 
 
-def chooseCity():
+def choose_city():
     cities = get_cities_from_file()
     record = random.choice(cities)
     country, capital = record.split("|")
@@ -99,7 +99,8 @@ def check_win(guessed_letters):
 def check_lose(lives, capital, country):
     if lives == 0:
         print(f"\n{Colors.br_red}YOU LOSE! WE ARE ALL DOOMED!{Colors.reset}\n")
-        print(f"The right answer was {Colors.green}{capital}{Colors.reset}. The capital of {country}.")
+        print(
+            f"The right answer was {Colors.green}{capital}{Colors.reset}. The capital of {country}.")
         return True
     return False
 
@@ -117,7 +118,7 @@ def play_again():
             print("**** You can enter 'yes' or 'no' only. ****")
 
 
-def blankSpots(capital):
+def blank_spots(capital):
     b_spots = []
     for letter in capital:
         if letter == ' ':
@@ -127,7 +128,7 @@ def blankSpots(capital):
     return b_spots
 
 
-def getUserInput():
+def get_user_input():
     while True:
         try:
             decision = input("Enter 'w' if you want to enter a whole word." +
@@ -140,7 +141,7 @@ def getUserInput():
             print("**** You can enter 'w' or 'l' only. ****")
 
 
-def checkWord(capital, guessed_letters):
+def check_word(capital, guessed_letters):
     user_capital = input('Enter name of the capital: ')
     if user_capital.upper() == capital:
         underscore_count = guessed_letters.count('_')
@@ -150,7 +151,7 @@ def checkWord(capital, guessed_letters):
         return -2, None
 
 
-def checkLetter(capital, guessed_letters, in_word, not_in_word):
+def check_letter(capital, guessed_letters, in_word, not_in_word):
     while True:
         try:
             user_letter = input(
@@ -169,7 +170,6 @@ def checkLetter(capital, guessed_letters, in_word, not_in_word):
             return result
         except ValueError:
             print("**** You can enter only letter. ****")
-    
 
 
 def lives_left(lives, result):
@@ -194,13 +194,13 @@ def stoper():
 
 
 # add to highscore list
-def endTime():
+def end_time():
     clock = time.strftime('%d %b %Y %H:%M:%S')
     return clock
 
 
 def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letters):
-    end_game_time = endTime()
+    end_game_time = end_time()
     line_with_data = [player_name, end_game_time,
                       scoring(start, stop, uncovered_letters), capital]
     split_line = '|'.join([str(elem) for elem in line_with_data])
@@ -210,7 +210,7 @@ def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letter
 
 def scoring(start, stop, uncovered_letters):
     play_time = stop - start
-    if play_time < 1200:
+    if play_time < 120:
         time_score = 1200 - (10*(play_time))
     else:
         time_score = 0
@@ -272,7 +272,7 @@ def menu():
             system('clear')
             show_banner()
             print(f'Choose option:\n'+'1. Start Game\n' +
-                  '2. High Score\n'+'3. About\n'+'4. Exit(do zrobienia)\n')
+                  '2. High Score\n'+'3. About\n'+'4. Exit\n')
             choice = input('Your choice: ')
             if choice == '1':
                 break
@@ -282,6 +282,8 @@ def menu():
             elif choice == '3':
                 system('clear')
                 about()
+            elif choice == '4':
+                exit_game()
             else:
                 raise ValueError
         except ValueError:
@@ -309,6 +311,14 @@ def final_informations(in_word, not_in_word, start_time, stop_time):
         f"You guessed the capital after {tries} letters. It took you {play_time} seconds")
 
 
+def exit_game():
+    system('clear')
+    show_banner()
+    print('\n\nThanks for buy our game $$$$. GANG!!')
+    time.sleep(2)
+    exit(1)
+
+
 def main():
     play = True
     while play:
@@ -317,8 +327,8 @@ def main():
         uncovered_letters = 0
         in_word = set()
         lives = 5
-        capital, country = chooseCity()
-        guessed_letters = blankSpots(capital)
+        capital, country = choose_city()
+        guessed_letters = blank_spots(capital)
         start_time = stoper()
         while True:
             system("clear")
@@ -338,17 +348,16 @@ def main():
                 capital, start_time, stop_time, player_name, uncovered_letters)
                 input("\nEnter enything to proceed to high score. ")
                 break
-            if getUserInput() == "W":
-                result, uncovered_letters = checkWord(capital, guessed_letters)
+            if get_user_input() == "W":
+                result, uncovered_letters = check_word(
+                    capital, guessed_letters)
             else:
-                result = checkLetter(
+                result = check_letter(
                     capital, guessed_letters, in_word, not_in_word)
             lives = lives_left(lives, result)
         system("clear")
         show_high_score_top10()
         
-
-    print("end")
 
 
 if __name__ == "__main__":
