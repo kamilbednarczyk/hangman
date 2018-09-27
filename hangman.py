@@ -125,7 +125,7 @@ def get_user_input():
         try:
             decision = input(f"\nEnter {Colors.blue}W{Colors.reset} for whole word " +
                              f"or {Colors.blue}L{Colors.reset} for one letter: ")
-            decision = decision.upper()
+            decision = decision.upper().strip()
             if decision == 'W' or decision == 'L':
                 return decision
             raise ValueError
@@ -135,7 +135,7 @@ def get_user_input():
 
 def check_word(capital, guessed_letters):
     user_capital = input('Enter name of the capital: ')
-    if user_capital.upper() == capital:
+    if user_capital.upper().strip() == capital:
         underscore_count = guessed_letters.count('_')
         guessed_letters[:] = list(capital)
         return 0, underscore_count
@@ -147,7 +147,7 @@ def check_letter(capital, guessed_letters, in_word, not_in_word):
     while True:
         try:
             user_letter = input(
-                'Enter one letter which is in the name of the capital: ').upper()
+                'Enter one letter which is in the name of the capital: ').upper().strip()
             if len(user_letter) > 1 or user_letter.isalpha() == False:
                 raise ValueError
             result = -1
@@ -264,7 +264,7 @@ def menu():
             show_banner()
             print(f'Choose option:\n'+'1. Start Game\n' +
                   '2. High Score\n'+'3. About\n'+'4. Exit\n')
-            choice = input('Your choice: ')
+            choice = input('Your choice: ').strip()
             if choice == '1':
                 break
             elif choice == '2':
@@ -286,7 +286,7 @@ def back_to_menu():
     while True:
         try:
             decision = input(
-                f"Enter '{word_to_exit}' if you want back to menu: ")
+                f"Enter '{word_to_exit}' if you want back to menu: ").strip()
             decision = decision.upper()
             if decision == 'EXIT' or decision == 'X':
                 break
@@ -305,7 +305,7 @@ def final_informations(in_word, not_in_word, start_time, stop_time):
 def exit_game():
     system('clear')
     show_banner()
-    print('\n\nThanks for buy our game $$$$. GANG!!')
+    print('\n\nThanks for buying our game $$$$. GANG!!')
     time.sleep(2)
     exit(1)
 
