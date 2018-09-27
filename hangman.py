@@ -7,11 +7,13 @@ from tabulate import tabulate
 
 class Colors():
     reset = "\033[0m"
-    green = "\033[38;2;0;255;0m"
+    green = "\033[38;2;5;163;0m"
+    blue = "\033[38;2;48;0;160m"
     br_red = "\033[1;31m"
     blink_br_red = "\033[1;5;31m"
     sbrown = "\033[38;2;139;69;19m"
     nwhite = "\033[38;2;255;222;173m"
+    purple = "\033[38;2;203;2;214m"
     col = "\033[38;2;139;69;19m"
 
 
@@ -43,18 +45,21 @@ def choose_city():
 
 def tip(lives, country):
     if lives == 1:
-        print(f"Psst, It's the capital city of {country}.")
+        print(f"\n{Colors.purple}Psst, It's the capital city of {country}.{Colors.reset}")
 
 
 def print_word_status(word):
+    print()
     print("Capital: ", end="")
     for place in word:
-        print(f"{place}", end=" ")
+        if place != "_":
+            print(f"{Colors.green}", end="")
+        print(f"{place}{Colors.reset}", end=" ")
     print()
 
 
 def print_wrong_letters(not_in_word):
-    print(f"{Colors.col}Wrong letter used: ", end="")
+    print(f"\n{Colors.br_red}Wrong letter used: ", end="")
     for letter in not_in_word:
         print(letter, ",", sep="", end=" ")
     print(Colors.reset)
@@ -91,31 +96,18 @@ def print_lives(lives):
 
 def check_win(guessed_letters):
     if '_' not in guessed_letters:
-        print("CONGRATULATIONS! YOU WIN!")
+        print(f"\n{Colors.green}CONGRATULATIONS! YOU WIN!{Colors.reset}")
         return True
     return False
 
 
 def check_lose(lives, capital, country):
     if lives == 0:
-        print(f"\n{Colors.br_red}YOU LOSE! WE ARE ALL DOOMED!{Colors.reset}\n")
+        print(f"\n{Colors.br_red}YOU LOSE! WE ARE ALL DOOMED!{Colors.reset}")
         print(
-            f"The right answer was {Colors.green}{capital}{Colors.reset}. The capital of {country}.")
+            f"\nThe right answer was {Colors.green}{capital}{Colors.reset}. The capital of {country}.")
         return True
     return False
-
-
-def play_again():
-    while True:
-        try:
-            again = input("Do you want to play again? (Enter yes or no): ")
-            if again.lower() == "no":
-                return False
-            elif again.lower() == "yes":
-                return True
-            raise ValueError
-        except ValueError:
-            print("**** You can enter 'yes' or 'no' only. ****")
 
 
 def blank_spots(capital):
@@ -131,14 +123,14 @@ def blank_spots(capital):
 def get_user_input():
     while True:
         try:
-            decision = input("Enter 'w' if you want to enter a whole word." +
-                             "Enter 'l' if you want to enter one letter: ")
+            decision = input(f"\nEnter {Colors.blue}W{Colors.reset} for whole word " +
+                             f"or {Colors.blue}L{Colors.reset} for one letter: ")
             decision = decision.upper()
             if decision == 'W' or decision == 'L':
                 return decision
             raise ValueError
         except ValueError:
-            print("**** You can enter 'w' or 'l' only. ****")
+            print("**** You can enter only 'w' or 'l'. ****")
 
 
 def check_word(capital, guessed_letters):
@@ -301,14 +293,14 @@ def back_to_menu():
                 break
             raise ValueError
         except ValueError:
-            print(f"**** You can enter '{word_to_exit}' only. ****")
+            print(f"**** You can enter only '{word_to_exit}'. ****")
 
 
 def final_informations(in_word, not_in_word, start_time, stop_time):
     tries = len(in_word) + len(not_in_word)
     play_time = int(stop_time - start_time)
     print(
-        f"You guessed the capital after {tries} letters. It took you {play_time} seconds")
+        f"\nYou guessed the capital after {tries} letters. It took you {play_time} seconds")
 
 
 def exit_game():
