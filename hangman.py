@@ -22,7 +22,7 @@ def read_file(f_name):
         with open(new_path, 'r', encoding="utf-8") as f:
             return f.readlines()
     except FileNotFoundError:
-        print(f"Cannot Find a file - {f.name}")
+        print(f"Cannot Find a file - {f_name}")
         return None
 
 
@@ -62,7 +62,7 @@ def print_wrong_letters(not_in_word):
 
 def read_hangman_art():
     hangman_list = read_file("ascii_hangman.txt")
-    if hangman_list == None:
+    if hangman_list is None:
         hangman_list = ""
     hangman_list = [elem[:-1] for elem in hangman_list]
     return hangman_list
@@ -209,7 +209,11 @@ def list_to_add_in_highscore(capital, start, stop, player_name, uncovered_letter
 
 
 def scoring(start, stop, uncovered_letters):
-    time_score = 1200 - (10*(stop-start))
+    play_time = stop - start
+    if play_time < 1200:
+        time_score = 1200 - (10*(play_time))
+    else:
+        time_score = 0
     under_cover_position = 100 * uncovered_letters
     score = int(time_score) + under_cover_position
     return score
@@ -247,18 +251,14 @@ def show_high_score_top10():
 
     back_to_menu()
 
-    
+
 def about():
-    print('Zasady punktacji:')
-    print('Na początku każdy gracz otrzymuje 1200 punktów. Każda sekunda czasu spędzonego'
-          ' nad rozwiązaniem zagadki odejmuje z tej puli 10 punktow.')
-    print('Dodatkowo po odgadnięciu nazwy stolicy, za każdą nie odkrytą literę otrzymujesz dodatkowe 100 punktów.\n')
-    print('Życia:')
-    print('Rozpoczynasz grę z 5 życiami. \nZa źle zgadniętą literę tracisz życie. \nJeśli źle odgadniesz nazwę miasta tracisz 2 życia.\n\n ')
-    print('AUTORZY:\nKamil Bednarczyk\nMarcin Pleban\n')
+    text = read_file('about.txt')
+    print(''.join(text))
+    print('\n\n')
     back_to_menu()
 
-    
+
 def show_banner():
     banner = read_file("banner_hangman.txt")
     if banner == None:
@@ -270,7 +270,7 @@ def menu():
     while True:
         try:
             system('clear')
-            show_banner()
+            # show_banner()
             print(f'Choose option:\n'+'1. Start Game\n' +
                   '2. High Score\n'+'3. About\n'+'4. Exit(do zrobienia)\n')
             choice = input('Your choice: ')

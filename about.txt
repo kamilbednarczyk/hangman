@@ -1,0 +1,10 @@
+Zasady punktacji:
+Na początku każdy gracz otrzymuje 1200 punktów. 
+Każda sekunda czasu spędzonego nad rozwiązaniem zagadki odejmuje z tej puli 10 punktow.   
+Dodatkowo po odgadnięciu nazwy stolicy, za każdą nie odkrytą literę otrzymujesz dodatkowe 100 punktów.     
+
+Życia:   
+Rozpoczynasz grę z 5 życiami.   
+Za źle zgadniętą literę tracisz życie.   Jeśli źle odgadniesz nazwę miasta tracisz 2 życia.        
+
+AUTORZY:  Kamil Bednarczyk  Marcin Pleban     
